@@ -47,15 +47,15 @@ scripts/start-server.sh --project-dir /path/to/project
 
 **注意：** 将项目根目录作为 `--project-dir` 传入，这样线框图会持久化到 `.superpowers/brainstorm/` 并在服务器重启后保留。不传此参数，文件会存到 `/tmp` 并被清理。提醒用户将 `.superpowers/` 添加到 `.gitignore`（如果尚未添加）。
 
-**按平台启动服务器：**
+**启动服务器：**
 
-**Claude Code（macOS / Linux）：**
+**macOS / Linux：**
 ```bash
 # 默认模式可用 — 脚本自行后台运行服务器
 scripts/start-server.sh --project-dir /path/to/project
 ```
 
-**Claude Code（Windows）：**
+**Windows：**
 ```bash
 # Windows 自动检测并使用前台模式，这会阻塞工具调用。
 # 在 Bash 工具调用上使用 run_in_background: true，以便服务器
@@ -63,22 +63,6 @@ scripts/start-server.sh --project-dir /path/to/project
 scripts/start-server.sh --project-dir /path/to/project
 ```
 通过 Bash 工具调用时，设置 `run_in_background: true`。然后在下一轮读取 `$STATE_DIR/server-info` 获取 URL 和端口。
-
-**Codex：**
-```bash
-# Codex 会回收后台进程。脚本自动检测 CODEX_CI 并
-# 切换到前台模式。正常运行 — 无需额外标志。
-scripts/start-server.sh --project-dir /path/to/project
-```
-
-**Gemini CLI：**
-```bash
-# 使用 --foreground 并在 shell 工具调用上设置 is_background: true
-# 以便进程在轮次之间持续运行
-scripts/start-server.sh --project-dir /path/to/project --foreground
-```
-
-**其他环境：** 服务器必须在对话轮次之间在后台持续运行。如果你的环境会回收分离的进程，使用 `--foreground` 并用你平台的背景执行机制启动命令。
 
 如果从浏览器无法访问 URL（常见于远程/容器化设置），绑定非回环主机：
 

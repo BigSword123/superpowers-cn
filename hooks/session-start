@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# Superpowers 插件的 SessionStart 钩子
+# Superpowers 中文版插件的 SessionStart 钩子
 
 set -euo pipefail
 
@@ -17,9 +17,6 @@ fi
 # 读取 using-superpowers 内容
 using_superpowers_content=$(cat "${PLUGIN_ROOT}/skills/using-superpowers/SKILL.md" 2>&1 || echo "读取 using-superpowers 技能时出错")
 
-# 使用 bash 参数替换转义字符串以便嵌入 JSON。
-# 每个 ${s//old/new} 是一次 C 级别的操作——比
-# 被替换的逐字符循环快了几个数量级。
 escape_for_json() {
     local s="$1"
     s="${s//\\/\\\\}"
@@ -34,24 +31,8 @@ using_superpowers_escaped=$(escape_for_json "$using_superpowers_content")
 warning_escaped=$(escape_for_json "$warning_message")
 session_context="<EXTREMELY_IMPORTANT>\n你拥有超能力（superpowers）。\n\n**以下是你的 'superpowers:using-superpowers' 技能的完整内容——你使用技能的入门指南。对于所有其他技能，请使用 'Skill' 工具：**\n\n${using_superpowers_escaped}\n\n${warning_escaped}\n</EXTREMELY_IMPORTANT>"
 
-# 将上下文注入输出为 JSON。
-# Cursor hooks 期望 additional_context（snake_case）。
-# Claude Code hooks 期望 hookSpecificOutput.additionalContext（嵌套的）。
-# Copilot CLI（v1.0.11+）和其他期望 additionalContext（顶层，SDK 标准）。
-# Claude Code 同时读取 additional_context 和 hookSpecificOutput 而
-# 不会去重，因此我们必须只输出当前平台使用的字段。
-#
+# Claude Code 标准的 hookSpecificOutput 格式。
 # 使用 printf 而非 heredoc 来解决 bash 5.3+ heredoc 挂起问题。
-# 参见：https://github.com/obra/superpowers/issues/571
-if [ -n "${CURSOR_PLUGIN_ROOT:-}" ]; then
-  # Cursor 设置 CURSOR_PLUGIN_ROOT（可能也设置 CLAUDE_PLUGIN_ROOT）
-  printf '{\n  "additional_context": "%s"\n}\n' "$session_context"
-elif [ -n "${CLAUDE_PLUGIN_ROOT:-}" ] && [ -z "${COPILOT_CLI:-}" ]; then
-  # Claude Code 设置 CLAUDE_PLUGIN_ROOT 但没有 COPILOT_CLI
-  printf '{\n  "hookSpecificOutput": {\n    "hookEventName": "SessionStart",\n    "additionalContext": "%s"\n  }\n}\n' "$session_context"
-else
-  # Copilot CLI（设置 COPILOT_CLI=1）或未知平台——SDK 标准格式
-  printf '{\n  "additionalContext": "%s"\n}\n' "$session_context"
-fi
+printf '{\n  "hookSpecificOutput": {\n    "hookEventName": "SessionStart",\n    "additionalContext": "%s"\n  }\n}\n' "$session_context"
 
 exit 0

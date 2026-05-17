@@ -17,8 +17,7 @@ labels: bug
 | 字段 | 值 |
 |------|-----|
 | Superpowers 版本 | |
-| Harness（Claude Code、Cursor 等） | |
-| Harness 版本 | |
+| Claude Code 版本 | |
 | 模型 | |
 | 操作系统 + shell | |
 
