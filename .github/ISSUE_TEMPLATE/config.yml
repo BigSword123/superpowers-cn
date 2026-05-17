@@ -1,0 +1,5 @@
+blank_issues_enabled: false
+contact_links:
+  - name: 问题与帮助
+    url: https://discord.gg/35wsABTejz
+    about: 有关使用问题、故障排除帮助和一般讨论，请访问我们的 Discord 而不是提交 issue。

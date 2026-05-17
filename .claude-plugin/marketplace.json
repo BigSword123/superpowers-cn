@@ -1,0 +1,18 @@
+{
+  "name": "superpowers-cn-dev",
+  "description": "Superpowers 核心技能库中文版的开发市场",
+  "owner": {
+    "name": "BigSword123"
+  },
+  "plugins": [
+    {
+      "name": "superpowers-cn",
+      "description": "Superpowers 核心技能库中文版：TDD、调试、协作模式和经过验证的开发技巧",
+      "version": "5.1.0",
+      "source": "./",
+      "author": {
+        "name": "Jesse Vincent (原作) / BigSword123 (中文翻译)"
+      }
+    }
+  ]
+}
