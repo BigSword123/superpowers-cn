@@ -222,10 +222,6 @@ git worktree prune  # 自愈：清理任何过时的注册
 - **问题：** 当 CWD 在被移除的 worktree 内部时命令静默失败
 - **修复：** 始终在 `git worktree remove` 之前 `cd` 到主仓库根目录
 
-**清理由 Claude Code 拥有的 worktree**
-- **问题：** 移除 Claude Code 创建的 worktree 会导致幻影状态
-- **修复：** 只清理 `.worktrees/`、`worktrees/` 或 `~/.config/superpowers/worktrees/` 下的 worktree
-
 **丢弃时没有确认**
 - **问题：** 意外删除工作成果
 - **修复：** 要求输入 "discard" 确认

@@ -46,19 +46,13 @@ git rev-parse --show-superproject-working-tree 2>/dev/null
 
 ## 步骤 1：创建隔离的工作区
 
-**你有两种机制。按以下顺序尝试。**
+使用 EnterWorktree 工具创建隔离的 worktree。如果 EnterWorktree 不可用，使用下方的 git worktree 回退方案。
 
-### 1a. 原生 Worktree 工具（首选）
+EnterWorktree 自动处理目录放置、分支创建和清理。使用 `git worktree add` 而非 EnterWorktree 会创建无法看见或管理的幻影状态。
 
-用户已请求隔离的工作区（步骤 0 同意）。你已经有创建 worktree 的方式了吗？它可能是一个叫 `EnterWorktree`、`WorktreeCreate` 的工具，一个 `/worktree` 命令，或一个 `--worktree` 标志。如果有，使用它并跳到步骤 3。
+### Git Worktree 回退方案
 
-原生工具自动处理目录放置、分支创建和清理。当你拥有原生工具时使用 `git worktree add` 会创建 Claude Code 无法看见或管理的幻影状态。
-
-仅当没有可用的原生 worktree 工具时才进入步骤 1b。
-
-### 1b. Git Worktree 回退方案
-
-**仅当步骤 1a 不适用时使用此方案**——你没有可用的原生 worktree 工具。使用 git 手动创建 worktree。
+**仅当 EnterWorktree 不可用时使用此方案。** 使用 git 手动创建 worktree。
 
 #### 目录选择
 
@@ -157,8 +151,8 @@ Worktree 就绪，位于 <full-path>
 |-----------|--------|
 | 已在链接的 worktree 中 | 跳过创建（步骤 0） |
 | 在子模块中 | 当作普通仓库（步骤 0 防护） |
-| 原生 worktree 工具可用 | 使用它（步骤 1a） |
-| 无原生工具 | Git worktree 回退方案（步骤 1b） |
+| EnterWorktree 可用 | 使用它（步骤 1） |
+| 无 EnterWorktree | Git worktree 回退方案（步骤 1） |
 | `.worktrees/` 存在 | 使用它（验证已忽略） |
 | `worktrees/` 存在 | 使用它（验证已忽略） |
 | 两者都存在 | 使用 `.worktrees/` |
@@ -174,7 +168,7 @@ Worktree 就绪，位于 <full-path>
 ### 与 Claude Code 对抗
 
 - **问题：** 当 Claude Code 已提供隔离时使用 `git worktree add`
-- **修复：** 步骤 0 检测已有隔离。步骤 1a 优先使用原生工具。
+- **修复：** 步骤 0 检测已有隔离。优先使用 EnterWorktree。
 
 ### 跳过检测
 
@@ -200,15 +194,15 @@ Worktree 就绪，位于 <full-path>
 
 **绝不要：**
 - 当步骤 0 检测到已有隔离时创建 worktree
-- 当你有原生 worktree 工具时使用 `git worktree add`（如 `EnterWorktree`）。这是头号错误——如果你有，就使用它。
-- 跳过步骤 1a 直接跳到步骤 1b 的 git 命令
+- 当 EnterWorktree 可用时使用 `git worktree add`。这是头号错误——如果你有 EnterWorktree，就使用它。
+- 跳过 EnterWorktree 直接使用 git 命令
 - 在未验证已忽略的情况下创建 worktree（项目级）
 - 跳过基线测试验证
 - 在未询问的情况下以失败测试继续
 
 **始终要：**
 - 先运行步骤 0 检测
-- 优先使用原生工具而非 git 回退方案
+- 优先使用 EnterWorktree 而非 git 回退方案
 - 遵循目录优先级：已有 > 全局旧版 > 指令文件 > 默认
 - 验证项目级目录已忽略
 - 自动检测并运行项目设置

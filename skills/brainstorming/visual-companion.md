@@ -49,20 +49,15 @@ scripts/start-server.sh --project-dir /path/to/project
 
 **启动服务器：**
 
-**macOS / Linux：**
 ```bash
-# 默认模式可用 — 脚本自行后台运行服务器
+# 默认后台模式 — 脚本自行后台运行服务器
 scripts/start-server.sh --project-dir /path/to/project
 ```
 
-**Windows：**
+如需前台模式：
 ```bash
-# Windows 自动检测并使用前台模式，这会阻塞工具调用。
-# 在 Bash 工具调用上使用 run_in_background: true，以便服务器
-# 在对话轮次之间持续运行。
-scripts/start-server.sh --project-dir /path/to/project
+scripts/start-server.sh --project-dir /path/to/project --foreground
 ```
-通过 Bash 工具调用时，设置 `run_in_background: true`。然后在下一轮读取 `$STATE_DIR/server-info` 获取 URL 和端口。
 
 如果从浏览器无法访问 URL（常见于远程/容器化设置），绑定非回环主机：
 
